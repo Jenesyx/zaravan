@@ -1,0 +1,79 @@
+@import "tailwindcss";
+@import "lenis/dist/lenis.css";
+@config "../tailwind.config.js";
+
+:root {
+  --void: #0A0A0A;
+  --ink: #121110;
+  --ink-2: #1A1917;
+  --saffron: #F2B01E;
+  --saffron-lift: #FFD45E;
+  --saffron-deep: #C98A0B;
+  --bone: #F5F2EC;
+  --bone-dim: #A8A49B;
+  --mute: #6E6A63;
+  --line: rgba(245,242,236,0.10);
+  --line-warm: rgba(242,176,30,0.22);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+html {
+  background: var(--void);
+}
+
+body {
+  min-height: 100vh;
+  background: var(--void);
+  color: var(--bone);
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+::selection {
+  background: var(--saffron);
+  color: var(--void);
+}
+
+:focus-visible {
+  outline: 2px solid var(--saffron-lift);
+  outline-offset: 3px;
+}
+
+/* Type tokens from Design.md §2.2 that are not included in its §7 config block. */
+.type-title {
+  font-family: var(--font-ui), system-ui, sans-serif;
+  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.type-body-l {
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+.type-body {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+.type-caption {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* The overlay stays out of the way until useMaskReveal animates it. */
+[data-mask-cover] {
+  transform: scaleY(0);
+  transform-origin: top;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
