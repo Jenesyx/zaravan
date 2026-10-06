@@ -1,27 +1,70 @@
 "use client";
 
-import { useRef } from "react";
-import { SectionLabel } from "@/components/ui/section-label";
+import { useRef, useState } from "react";
+import type { KeyboardEvent } from "react";
 import { testimonials } from "@/lib/data/testimonials";
 import { useLineRise } from "@/lib/motion/use-line-rise";
-import { useTestimonialDrift } from "@/lib/motion/use-testimonial-drift";
-
-const columns = [[testimonials[0], testimonials[3]], [testimonials[1]], [testimonials[2], testimonials[4]]];
 
 export function Testimonials() {
-  const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [active, setActive] = useState(0);
   useLineRise(headingRef);
-  useTestimonialDrift(sectionRef);
+
+  // WAI-ARIA tabs: arrows move and select, Home/End jump to the ends.
+  const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const last = testimonials.length - 1;
+    const next = { ArrowRight: active + 1, ArrowLeft: active - 1, Home: 0, End: last }[event.key];
+    if (next === undefined) return;
+    event.preventDefault();
+    const index = next < 0 ? last : next > last ? 0 : next;
+    setActive(index);
+    tabRefs.current[index]?.focus();
+  };
+
   return (
-    <section id="testimonials" ref={sectionRef} className="testimonials section-space" aria-labelledby="testimonials-title">
-      <div className="shell testimonials__intro"><SectionLabel>AT THE TABLE</SectionLabel><h2 ref={headingRef} id="testimonials-title" className="section-heading" data-anim>The harvest, in their words.</h2><p className="testimonials__draft eyebrow">DRAFT COPY FOR LAYOUT REVIEW · REPLACE WITH VERIFIED REVIEWS BEFORE LAUNCH</p></div>
-      <div className="testimonials__window shell">
-        <div className="testimonials__grid">
-          {columns.map((column, columnIndex) => <div className="testimonials__column" data-drift-column key={columnIndex}>
-            {column.map((item) => <blockquote className="quote-card" key={item.attribution}><p>“{item.quote}”</p><footer className="eyebrow">{item.attribution}</footer></blockquote>)}
-          </div>)}
+    <section id="testimonials" className="voices" aria-labelledby="testimonials-title">
+      <div className="shell">
+        <h2 ref={headingRef} id="testimonials-title" className="display-l" data-anim>The harvest, in <em>their words.</em></h2>
+
+        <div className="voices__stage">
+          {testimonials.map((item, index) => (
+            <figure
+              key={item.id}
+              id={`voice-panel-${item.id}`}
+              role="tabpanel"
+              aria-labelledby={`voice-tab-${item.id}`}
+              className={`voice${index === active ? " is-active" : ""}`}
+              inert={index !== active}
+            >
+              <blockquote className="voice__quote"><p>“{item.quote}”</p></blockquote>
+              <figcaption className="voice__by"><span className="voice__name">{item.name}</span><span className="data">{item.place}</span></figcaption>
+            </figure>
+          ))}
         </div>
+
+        <div className="voices__tabs" role="tablist" aria-label="Reviews" onKeyDown={onKeyDown}>
+          {testimonials.map((item, index) => (
+            <button
+              key={item.id}
+              ref={(element) => { tabRefs.current[index] = element; }}
+              id={`voice-tab-${item.id}`}
+              role="tab"
+              type="button"
+              aria-selected={index === active}
+              aria-controls={`voice-panel-${item.id}`}
+              tabIndex={index === active ? 0 : -1}
+              className="voices__tab"
+              onClick={() => setActive(index)}
+            >
+              <span className="voices__tab-name">{item.name}</span>
+              <span className="voices__tab-place">{item.place}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Business.md §7.4: these are layout drafts and must be replaced before launch. */}
+        <p className="voices__note">Draft reviews for layout only. Verified customer reviews replace them before launch.</p>
       </div>
     </section>
   );

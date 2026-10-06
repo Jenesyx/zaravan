@@ -7,6 +7,23 @@
 
 ---
 
+## v1.1 Overrides (homepage redesign, October 2026)
+
+Where this block and the sections below disagree, this block wins.
+
+- **Type:** display is Cormorant Garamond (echoes the spaced serif capitals on the packaging), body Geist, data Geist Mono, all via `next/font/google` until licensed faces are chosen. Emphasis inside a headline is italic of the same family, never a second family.
+- **Shape:** one radius, `--radius: 2px`, for buttons, inputs, tiles and dialogs (replaces the 4px card radius).
+- **Saffron:** primary action and focus ring only. Selected states use Bone, not Saffron.
+- **Copy:** no em or en dashes anywhere visible. At most one small-caps eyebrow above a section headline per three sections. Quotes fit in three lines.
+- **Icons:** Phosphor (`@phosphor-icons/react`). No hand-drawn SVG icons.
+- **No custom cursor** (§5.5 "Custom cursor" and the product card's VIEW cursor are retired).
+- **No `window` scroll listeners.** Scroll-driven state goes through ScrollTrigger.
+- **Hero (§6 · 01):** the film ships as a WebP frame sequence (`public/videos/frames/`, settings in `lib/data/hero.ts`), never as `<video>`. The hero pins for 300% of a viewport: the right-hand frame opens to full bleed, then scrolling steps the frames forward and back on a canvas, then the page continues. Reduced motion: no pin, and the poster shows the final frame.
+- **Products (§6 · 05):** a Signature module (4:5 image stage, size picker with per-gram price, price counts on change) replaces the carousel and the separate price ladder; the other six SKUs follow in an asymmetric two-row grid that opens a details dialog.
+- **Testimonials (§6 · 07):** one large quote with a tab list of names, not a drifting card wall.
+
+---
+
 ## 0. Design Thesis
 
 The product is a thread of red-gold that glows when light passes through it. The entire site is built on that single observation: **a dark room, and one source of light.**

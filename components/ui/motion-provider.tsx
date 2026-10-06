@@ -7,6 +7,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
 gsap.registerPlugin(ScrollTrigger);
+// Mobile address bars resize the viewport while scrolling; don't re-measure the hero pin for that.
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 const MotionContext = createContext(false);
 
@@ -41,7 +43,8 @@ export function MotionProvider({ children }: { children: ReactNode }) {
         y: 0,
         clipPath: "none",
       });
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+      // Motion hooks tear down their own timelines when `enabled` flips; triggers that only
+      // track state (the nav background) keep running.
       stopLenis(); // Native scroll under reduced motion.
     });
 

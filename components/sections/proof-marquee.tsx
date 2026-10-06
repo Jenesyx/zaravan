@@ -3,17 +3,21 @@
 import { useRef } from "react";
 import { useMarqueeMotion } from "@/lib/motion/use-marquee-motion";
 
+// Business.md §7.1 proof strip, plus the duties promise from §4.
 const facts = [
-  "SINGLE-ORIGIN KHORASAN",
-  "ISO 3632-2 CATEGORY I",
-  "2026 HARVEST",
-  "CROCIN 287",
-  "WORLDWIDE IN UNDER 7 DAYS",
-  "DUTIES PAID",
+  "Single-origin Khorasan",
+  "ISO 3632-2 Category I",
+  "2026 harvest",
+  "Worldwide in under a week",
+  "Duties paid to the EU, UK, US and Canada",
 ];
 
 function FactSet({ hidden = false }: { hidden?: boolean }) {
-  return <span className="proof-marquee__set" aria-hidden={hidden}>{facts.map((fact) => <span className="proof-marquee__fact" key={fact}>{fact}<span className="proof-marquee__dot" aria-hidden="true">·</span></span>)}</span>;
+  return (
+    <ul className="proof-marquee__set" aria-hidden={hidden || undefined}>
+      {facts.map((fact) => <li className="proof-marquee__fact" key={fact}>{fact}</li>)}
+    </ul>
+  );
 }
 
 export function ProofMarquee() {

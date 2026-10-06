@@ -2,6 +2,7 @@
 @import "lenis/dist/lenis.css";
 @config "../tailwind.config.js";
 
+/* Keep in sync with tailwind.config.js. */
 :root {
   --void: #0A0A0A;
   --ink: #121110;
@@ -13,9 +14,23 @@
   --bone-dim: #A8A49B;
   --mute: #6E6A63;
   --line: rgba(245,242,236,0.10);
+  --line-strong: rgba(245,242,236,0.24);
   --line-warm: rgba(242,176,30,0.22);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* One corner radius for every surface: buttons, inputs, tiles, dialogs. */
+  --radius: 2px;
+  --gutter: clamp(20px, 4.4vw, 64px);
+  --space-section: clamp(104px, 12vw, 184px);
+  --nav-h: 72px;
+
+  /* Layer scale. */
+  --z-menu: 70;
+  --z-nav: 80;
+  --z-skip: 120;
+
+  color-scheme: dark;
 }
 
 html {
@@ -23,13 +38,18 @@ html {
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--void);
   color: var(--bone);
   font-family: var(--font-ui), system-ui, sans-serif;
   font-size: 1.0625rem;
   font-weight: 400;
   line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+p {
+  text-wrap: pretty; /* No one-word last lines. */
 }
 
 ::selection {
@@ -42,34 +62,17 @@ body {
   outline-offset: 3px;
 }
 
-/* Type tokens from Design.md §2.2 that are not included in its §7 config block. */
-.type-title {
-  font-family: var(--font-ui), system-ui, sans-serif;
-  font-size: clamp(1.25rem, 1.6vw, 1.5rem);
-  line-height: 1.35;
-  letter-spacing: -0.01em;
-}
-
-.type-body-l {
-  font-size: 1.25rem;
-  line-height: 1.6;
-}
-
-.type-body {
-  font-size: 1.0625rem;
-  line-height: 1.65;
-}
-
-.type-caption {
-  font-size: 0.875rem;
-  line-height: 1.5;
-}
-
 /* The overlay stays out of the way until useMaskReveal animates it. */
 [data-mask-cover] {
   transform: scaleY(0);
   transform-origin: top;
   pointer-events: none;
+}
+
+/* useLineRise wraps each line in an overflow mask; pad it so descenders aren't clipped. */
+.line-mask {
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
 }
 
 @media (prefers-reduced-motion: reduce) {

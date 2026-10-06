@@ -19,14 +19,12 @@ export function useMagnetic(ref: RefObject<HTMLElement | null>, active = true) {
 
     const setX = gsap.quickSetter(element, "x", "px");
     const setY = gsap.quickSetter(element, "y", "px");
-    let rect = element.getBoundingClientRect();
     let currentX = 0;
     let currentY = 0;
     let targetX = 0;
     let targetY = 0;
     let frame = 0;
 
-    const measure = () => { rect = element.getBoundingClientRect(); };
     const tick = () => {
       currentX += (targetX - currentX) * LERP;
       currentY += (targetY - currentY) * LERP;
@@ -39,8 +37,10 @@ export function useMagnetic(ref: RefObject<HTMLElement | null>, active = true) {
       }
     };
     const onMove = (event: PointerEvent) => {
-      const dx = event.clientX - (rect.left + rect.width / 2);
-      const dy = event.clientY - (rect.top + rect.height / 2);
+      // Measure live, minus our own offset, so scrolling never leaves a stale rect behind.
+      const rect = element.getBoundingClientRect();
+      const dx = event.clientX - (rect.left - currentX + rect.width / 2);
+      const dy = event.clientY - (rect.top - currentY + rect.height / 2);
       if (Math.hypot(dx, dy) > RADIUS) {
         if (targetX || targetY) onLeave();
         return;
@@ -63,22 +63,17 @@ export function useMagnetic(ref: RefObject<HTMLElement | null>, active = true) {
         y: 0,
         duration: DURATION.base,
         ease: EASE.spring,
-        onComplete: () => {
-          currentX = 0;
-          currentY = 0;
-          element.style.willChange = "";
-          measure();
+        onUpdate: () => {
+          currentX = Number(gsap.getProperty(element, "x"));
+          currentY = Number(gsap.getProperty(element, "y"));
         },
+        onComplete: () => { element.style.willChange = ""; },
       });
     };
 
     window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("scroll", measure, { passive: true });
-    window.addEventListener("resize", measure, { passive: true });
     return () => {
       window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("scroll", measure);
-      window.removeEventListener("resize", measure);
       if (frame) cancelAnimationFrame(frame);
       gsap.killTweensOf(element);
       gsap.set(element, { clearProps: "x,y" });

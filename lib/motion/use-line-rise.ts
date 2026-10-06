@@ -45,6 +45,7 @@ export function useLineRise(
 
       for (const line of lines) {
         const mask = document.createElement("span");
+        mask.className = "line-mask"; // Pads for descenders so the clip never cuts g, y, p.
         mask.style.display = "block";
         mask.style.overflow = "hidden";
         line.replaceWith(mask);

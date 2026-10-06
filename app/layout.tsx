@@ -1,30 +1,28 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Inter, JetBrains_Mono } from "next/font/google";
+import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
 import { MotionProvider } from "@/components/ui/motion-provider";
 import "./globals.css";
 import "./home.css";
 
-// Replace these next/font/google faces with licensed PP Editorial New,
-// PP Neue Montreal, and Söhne Mono via next/font/local when supplied.
-const display = Instrument_Serif({
+// Display serif echoes the spaced serif capitals on the packaging. Swap for licensed
+// faces via next/font/local when the brand typeface is chosen (Design.md §2.1).
+const display = Cormorant_Garamond({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
   display: "swap",
 });
 
-const ui = Inter({
+const ui = Geist({
   variable: "--font-ui",
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
   display: "swap",
 });
 
-const mono = JetBrains_Mono({
+const mono = Geist_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
-  weight: "400",
   display: "swap",
 });
 

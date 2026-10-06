@@ -11,6 +11,7 @@ export default {
       },
       borderColor: {
         hairline: 'rgba(245,242,236,0.10)',
+        strong:   'rgba(245,242,236,0.24)',
         warm:     'rgba(242,176,30,0.22)',
       },
       fontFamily: {
@@ -32,7 +33,7 @@ export default {
         gutter:     '4rem',    // 64
       },
       maxWidth: { shell: '1440px', prose: '62ch' },
-      borderRadius: { card: '4px', btn: '2px' },
+      borderRadius: { card: '2px', btn: '2px' },
       transitionTimingFunction: {
         out:   'cubic-bezier(0.16, 1, 0.3, 1)',
         inout: 'cubic-bezier(0.65, 0, 0.35, 1)',

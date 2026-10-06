@@ -1,57 +1,59 @@
 "use client";
 
+import Image from "next/image";
 import { useRef } from "react";
-import { SectionLabel } from "@/components/ui/section-label";
 import { useLineRise } from "@/lib/motion/use-line-rise";
+import { useReveal } from "@/lib/motion/use-reveal";
 
-const features = [
+const standards = [
   {
-    eyebrow: "01 / PURITY",
+    figure: "ISO 3632-2",
     title: "Measured before it leaves us.",
     body: "Every batch is tested to ISO 3632-2. Its crocin, picrocrocin, and safranal values travel with it.",
-    data: "ISO 3632-2 · EACH BATCH",
   },
   {
-    eyebrow: "02 / ORIGIN",
+    figure: "1961",
     title: "One family. One region.",
-    body: "Our threads are grown and picked in Khorasan by the family behind Zaravan.",
-    data: "KHORASAN, IRAN · EST. 1961",
+    body: "Our threads are grown and picked in Khorasan by the family behind Zaravan, on land first planted in 1961.",
   },
   {
-    eyebrow: "03 / FRESHNESS",
+    figure: "2026",
     title: "Only the current harvest.",
     body: "We mark the harvest year and batch on every package, then seal the threads at source.",
-    data: "2026 HARVEST · BATCH TRACED",
   },
   {
-    eyebrow: "04 / DELIVERY",
+    figure: "7 days",
     title: "Across the distance, quickly.",
-    body: "Worldwide delivery is guaranteed in under seven days. Duties are paid for the EU, UK, US, and Canada.",
-    data: "UNDER 7 DAYS · DUTIES PAID",
+    body: "Worldwide delivery in under seven days, or the shipping is refunded. Duties are paid for the EU, UK, US, and Canada.",
   },
 ];
 
-function FeatureItem({ feature, index }: { feature: (typeof features)[number]; index: number }) {
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  useLineRise(titleRef, { delay: index * 0.12 });
-  return (
-    <article className="feature-item">
-      <span className="eyebrow feature-item__eyebrow">{feature.eyebrow}</span>
-      <h3 ref={titleRef} className="feature-item__title" data-anim>{feature.title}</h3>
-      <p>{feature.body}</p>
-      <span className="data-text feature-item__data">{feature.data}</span>
-    </article>
-  );
-}
-
 export function Features() {
+  const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   useLineRise(headingRef);
+  useReveal(sectionRef);
+
   return (
-    <section id="features" className="features section-space" aria-labelledby="features-title">
-      <div className="shell">
-        <div className="features__intro"><SectionLabel>WHAT WE OFFER</SectionLabel><h2 ref={headingRef} id="features-title" className="section-heading" data-anim>Trust is a matter of <em>detail.</em></h2></div>
-        <div className="features__grid">{features.map((feature, index) => <FeatureItem key={feature.eyebrow} feature={feature} index={index} />)}</div>
+    <section id="features" ref={sectionRef} className="standards" aria-labelledby="features-title">
+      <div className="standards__grid shell">
+        <div className="standards__text">
+          <h2 ref={headingRef} id="features-title" className="display-l" data-anim>Trust is a matter of <em>detail.</em></h2>
+          <ol className="standards__list">
+            {standards.map((item) => (
+              <li className="standard" key={item.figure} data-reveal data-anim>
+                <p className="standard__figure">{item.figure}</p>
+                <div>
+                  <h3 className="standard__title">{item.title}</h3>
+                  <p className="standard__body">{item.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="standards__media" aria-hidden="true">
+          <Image src="/images/products/kitchen-large.png" alt="" fill sizes="(max-width: 1023px) 100vw, 38vw" className="standards__image" />
+        </div>
       </div>
     </section>
   );
